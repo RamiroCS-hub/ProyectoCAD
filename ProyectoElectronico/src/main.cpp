@@ -120,8 +120,8 @@ const int elecCafe = 23;
 // const int bomLeche = 35;
 // const int elecLeche = 33;
 // //Pines de cereales
-// const int posCere = 70;
-// const int servo = 27;
+const int posCere = 70;
+const int servo = 27;
 
 //Definición de teclado matricial
 const uint8_t ROWS = 4;
@@ -255,14 +255,15 @@ void loop() {
       //    lcd.clear();
       //    lcdWrite((unsigned char)* ("MUCHAS GRACIAS!"), lcd);
       //    break;
-      // case CEREALES:
-      //    lcdWrite((unsigned char)* ("Elijió los cereales"), lcd);
-      //    lcd.clear();
-      //    lcdWrite((unsigned char)* ("Preparando..."), lcd);
-      //    // posAct = moveMotor(posCere, posAct, servo, loopServo);
-      //    lcd.clear();
-      //    lcdWrite((unsigned char)* ("MUCHAS GRACIAS!"), lcd);
-      //    break;
+      case CEREALES:
+         /*lcdWrite((unsigned char)* ("Elijió los cereales"), lcd);
+         lcd.clear();
+         lcdWrite((unsigned char)* ("Preparando..."), lcd);*/
+         Serial.println("Tirando Cereales");
+         posAct = moveMotor(posCere, posAct, servo, loopServo);
+         //lcd.clear();
+         //lcdWrite((unsigned char)* ("MUCHAS GRACIAS!"), lcd);
+         break;
       // case CAFECLECHE:
       //    lcdWrite((unsigned char)* ("Elijió el cafe con leche"), lcd);
       //    lcd.clear();

@@ -5,7 +5,7 @@
 #define PINMOTOR 23
 #define SERVO 21
 #include "Arduino.h"
-// #include <Servo.h>
+#include <ESP32Servo.h>
 
 //Función para 2 actuadores
 int moveMotor(int posAIr, int posActual, int pinAct1, int pinAct2, int time) { 
@@ -49,37 +49,37 @@ int moveMotor(int posAIr, int posActual, int pinAct1, int pinAct2, int time) {
 };
 
 //Función para 1 actuador
-// int moveMotor(int posAIr, int posActual, int pinAct, int size){
-//     Servo servoMotor; //Se crea un objeto para controlar el servo
-//     Serial.println(posAIr);
-//     Serial.println(pinAct);
-//     servoMotor.attach(SERVO); //Se vincula el pin del servo al objeto
-//     //Se mueve el motor hasta la posición que se requiere
-//     if(posAIr > posActual){
-//         while(posAIr != posActual) {
-//             digitalWrite(DIREC, HIGH);
-//             digitalWrite(PINMOTOR, HIGH);
-//             posActual += 1;
-//             delay(2);
-//             digitalWrite(PINMOTOR, LOW);
-//             delay(2);
-//         };
-//     }else{
-//         while(posAIr != posActual) {
-//             digitalWrite(DIREC, LOW);
-//             digitalWrite(PINMOTOR, HIGH);
-//             posActual -= 1;
-//             delay(2);
-//             digitalWrite(PINMOTOR, LOW);
-//             delay(2);
-//         };
-//     }
-//     for(int i = 0; i <= size; i++){
-//         servoMotor.write(90);
-//     }
+int moveMotor(int posAIr, int posActual, int pinAct, int size){
+    Servo servoMotor; //Se crea un objeto para controlar el servo
+    Serial.println(posAIr);
+    Serial.println(pinAct);
+    servoMotor.attach(SERVO); //Se vincula el pin del servo al objeto
+    //Se mueve el motor hasta la posición que se requiere
+    if(posAIr > posActual){
+        while(posAIr != posActual) {
+            digitalWrite(DIREC, HIGH);
+            digitalWrite(PINMOTOR, HIGH);
+            posActual += 1;
+            delay(2);
+            digitalWrite(PINMOTOR, LOW);
+            delay(2);
+        };
+    }else{
+        while(posAIr != posActual) {
+            digitalWrite(DIREC, LOW);
+            digitalWrite(PINMOTOR, HIGH);
+            posActual -= 1;
+            delay(2);
+            digitalWrite(PINMOTOR, LOW);
+            delay(2);
+        };
+    }
+    for(int i = 0; i <= size; i++){
+        servoMotor.write(90);
+    }
     
-//     return posActual;
-// };
+    return posActual;
+};
 //Vuelve el motor a la posición inicial - Siempre que se termina un pedido se vuelve a la posición inicial
 void backMotor (int posAct){
     while(posAct != 0){
