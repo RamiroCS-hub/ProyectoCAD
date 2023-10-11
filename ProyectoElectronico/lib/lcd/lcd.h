@@ -3,38 +3,28 @@
 #include <LiquidCrystal_I2C.h>
 
 // FUNCION PARA IMPRIMIR MENSAJES
-void lcdWrite(char msg[], LiquidCrystal_I2C lcd){
-    int size = sizeof(msg)/sizeof(msg[0]);
-
-    Serial.println("El largo del msg es:" + size);
+void lcdWrite(String msg, LiquidCrystal_I2C lcd){
+    //int size = sizeof(msg)/sizeof(msg[0]);
+    bool contr = true;
+    int size = msg.length();
     lcd.setCursor(0,0);
-    
-    lcd.write(msg[1]);
-    for(int i = size; i = 0; i--){
-        Serial.println("La letra es: " );
-        lcd.write(msg[i]);
-    }
-    /*if(sizeof msg > 16){
-        for(unsigned int i=0; i > sizeof (msg - 16); i++){
-            lcd.scrollDisplayLeft();
-            delay(250);
+
+    if(size > 16){
+        for(int i = 0; i < size; i++){
+            if(i >= 16 && contr){
+                lcd.setCursor(0,1);
+                contr = false;
+            }
+            lcd.write(msg[i]);
         }  
-    }*/
-}
-void scrollDisplay(String msg, LiquidCrystal_I2C lcd){
-    Serial.println("Scrolleando el lcd:" );
-    msg.substring(16,-1);
+    }else{
+        lcd.print(msg);
+    }
 }
 // FUNCION PARA IMPRIMIR MENSAJES EN OTROS COLUMNAS Y FILAS
-void lcdWrite(unsigned char msg, LiquidCrystal_I2C lcd, int column, int row){
+void lcdWrite(String msg, LiquidCrystal_I2C lcd, int column, int row){
     Serial.println(msg);
-    lcd.setCursor(column, row);
-    lcd.write(msg);
-    if(sizeof msg > 16){
-        for(unsigned int i=0; i > sizeof (msg - 16); i++){
-            lcd.scrollDisplayLeft();
-            delay(250);
-        }  
-    }
+    lcd.setCursor(1, 1);
+    lcd.print(msg);
 }
 #endif //LCD_H

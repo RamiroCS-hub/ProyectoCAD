@@ -45,6 +45,7 @@ int moveMotor(int posAIr, int posActual, int pinAct1, int pinAct2, int time) {
     delay(time);
     digitalWrite(pinAct1,LOW);
     digitalWrite(pinAct2, LOW);
+    delay(3000);
     return posActual;
 };
 
@@ -77,7 +78,7 @@ int moveMotor(int posAIr, int posActual, int pinAct, int size){
     for(int i = 0; i <= size; i++){
         servoMotor.write(90);
     }
-    
+    delay(3000);
     return posActual;
 };
 //Vuelve el motor a la posición inicial - Siempre que se termina un pedido se vuelve a la posición inicial
@@ -91,6 +92,7 @@ void backMotor (int posAct){
         delay(2);
     }
     Serial.println("Volviendo atras el motor...");
+    
     delay(2000);
 };
 

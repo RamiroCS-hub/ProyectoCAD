@@ -14,8 +14,8 @@
 #define COOLLER_F 00
 #define RESIS 000 
 #define PELT_ 0000
-#define SDA 25
-#define SCL 26
+#define SDA 26
+#define SCL 25
 
 //Selecciona el pin al que se conecta el sensor de temperatura
 const int sen_peltf = SEN_F;
@@ -112,14 +112,14 @@ void loop1(void *parameter){
 #define LOOPG 6
 
 //Pines de cafe
-#define POSCAFE 120
+const int posCafe = 120;
 const int bomCafe = 22;
 const int elecCafe = 23;
-// //Pines de leche
-// const int posLeche = 16;
-// const int bomLeche = 35;
-// const int elecLeche = 33;
-// //Pines de cereales
+//Pines de leche
+const int posLeche = 16;
+const int bomLeche = 35;
+const int elecLeche = 33;
+//Pines de cereales
 const int posCere = 70;
 const int servo = 27;
 
@@ -129,15 +129,15 @@ const uint8_t COLS = 4;
 
 //Definición de la matriz
 char keys[ROWS][COLS] = {
-   { '1','2','3', 'A' },
-   { '4','5','6', 'B' },
-   { '7','8','9', 'C' },
-   { '*','0','#', 'D' }
+   { '1','2','3' ,'A'},
+   { '4','5','6','B' },
+   { '7','8','9','C' },
+   { '*','0','#' ,'D'},
 };
 
 //Declaraciones de pines de la matriz
-byte rowPins[ROWS] = { 17, 5, 18, 19 };
-byte columnPins[COLS] = { 15, 2, 4, 16 };
+byte rowPins[ROWS] = { 19, 4, 2, 16 };
+byte columnPins[COLS] = { 17, 18, 5, 15 };
 
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, columnPins, ROWS, COLS );
 
@@ -146,13 +146,17 @@ LiquidCrystal_I2C lcd(0x27, 16, 2); //Lo guardo en la dirección 0x27, 16 column
 void setup() {
    Serial.begin(9600);
    //Loop 1
-   lcd.init(SDA, SCL);
-   lcd.clear();
-   lcd.backlight();
-   // Print a message on both lines of the LCD.
-   lcd.setCursor(0, 0);  //Set cursor to character 2 on line 0
-   pinMode(elecCafe, OUTPUT);
+   // lcd.init(SDA, SCL);
+   // lcd.clear();
+   // lcd.backlight();
+   // lcd.blink_on();
+   // // Print a message on both lines of the LCD.
+   // lcd.setCursor(0, 0);  //Set cursor to character 0 on line 0
+   /*pinMode(elecCafe, OUTPUT);
    pinMode(bomCafe, OUTPUT); 
+   pinMode(bomLeche, OUTPUT);
+   pinMode(elecLeche, OUTPUT);
+   pinMode(servo, OUTPUT);*/
    //Loop 2
    xTaskCreatePinnedToCore(
        loop1,
@@ -169,27 +173,27 @@ void setup() {
 /* <--------- NUCLEO 0 ---------> */
 
 void loop() {
+   
    int posAct = 0;
    int waitTime = 0; //Tiempo que va a estar quieto el vaso
    int loopServo = 0; //Cantidad de pasos del servo
    bool contr = 1;
    char key;
    char size;
-   String msg;
    //INGRESO DE TAMAÑO DEL DESAYUNO
-   msg = "Ingrese el tamaño del vaso";
-   lcd.print(msg);
-   scrollDisplay(msg, lcd);
+   //lcdWrite("Ingrese la dimension del vaso", lcd);
    do{
       size = keypad.getKey();
       if(size){
          Serial.println(size);
-         contr = 0;
-         lcd.clear();
+         Serial.println("Ingreso");
+         //contr = 0;
+         //lcd.clear();
       }
       delay(100);
-   } while(contr);
+   } while(!size);
    Serial.println(size);
+   //lcd.clear();
    
    // /* Se cambian las variables de tiempo y mov. del servo dependiendo del tamaño de desayuno
    //    que se pidió */
@@ -197,32 +201,31 @@ void loop() {
    //    default:
    //       waitTime = TIMEC;
    //       loopServo = LOOPC;
-   //       //lcdWrite((unsigned char)* ("Tamaño Chico"), lcd);
+   //       lcdWrite(("Tamaño Chico"), lcd);
    //       Serial.println("Tamaño chico");
    //       break;
    //    case CHICO:
    //       waitTime = TIMEC;
    //       loopServo = LOOPC;
-   //       //lcdWrite((unsigned char)* ("Tamaño Chico"), lcd);
+   //       lcdWrite(("Tamaño Chico"), lcd);
    //       Serial.println("Tamaño chico");
    //       break;
    //    case MEDIANO:
    //       waitTime = TIMEM;
    //       loopServo = LOOPM;
-   //       //lcd.setCursor(0, 1);
-   //       //lcdWrite((unsigned char)* ("Tamaño Mediano"), lcd);
+   //       lcdWrite(("Tamaño Mediano"), lcd);
    //       break;
    //    case GRANDE:
    //       waitTime = TIMEG;
    //       loopServo = LOOPG;
-   //       //lcd.setCursor(0, 1);
-   //       //lcdWrite((unsigned char)* ("Tamaño Grande"), lcd);
+   //       lcdWrite(("Tamaño Grande"), lcd);
    //       break;
    // };
+   // delay(2000);
 
    // /* INGRESO DE QUE SE QUIERE PREPARAR */
-   // //lcd.clear();
-   // //lcdWrite((unsigned char)* ("Ingrese lo que quiere preparar"), lcd);  
+   // lcd.clear();
+   // lcdWrite(("Ingrese lo que  quiere preparar"), lcd);  
    // contr = 1;
    // do {
    //    key = keypad.getKey();
@@ -233,62 +236,77 @@ void loop() {
    //    delay(50);
    // } while(contr);
 
-   // //lcd.clear();
+   // lcd.clear();
 
    // // Dependiendo de que se ingresa se llama a la función con la posición a la que se quiere mover
    // switch(key){
    //    default:
-   //       //lcdWrite((unsigned char)* ("Elija algo del menú"), lcd);
+   //       lcdWrite(("Elija algo del menú"), lcd);
    //       Serial.println("Elija algo del menú");
+   //       lcd.clear();
    //       break;
    //    case CAFE:
-   //       // lcdWrite((unsigned char)* ("Elijió Cafe"), lcd);
-   //       // lcdWrite((unsigned char)* ("Preparando..."), lcd, 1, 0);
-   //       Serial.println("Elijió el café");
-   //       posAct = moveMotor(POSCAFE, posAct, bomCafe, elecCafe, waitTime);
+   //       lcdWrite(("Cafe"), lcd);
+   //       delay(2000);
+   //       lcd.clear();
+   //       lcdWrite(("Preparando..."), lcd);
+   //       posAct = moveMotor(posCafe, posAct, bomCafe, elecCafe, waitTime);
+   //       delay(4000);
    //       Serial.print("La posición del vaso es: ");
    //       Serial.println(posAct);
-   //       // lcd.clear();
-   //       // lcdWrite((unsigned char)* ("MUCHAS GRACIAS!"), lcd);
-   //       break;
-   //    // case LECHE:
-   //    //    lcdWrite((unsigned char)* ("Elijió Leche"), lcd);
-   //    //    lcd.clear();
-   //    //    lcdWrite((unsigned char)* ("Preparando..."),lcd);
-   //    //    posAct = moveMotor(posLeche, posAct, bomLeche, elecLeche, waitTime);
-   //    //    lcd.clear();
-   //    //    lcdWrite((unsigned char)* ("MUCHAS GRACIAS!"), lcd);
-   //    //    break;
-   //    case CEREALES:
-   //       /*lcdWrite((unsigned char)* ("Elijió los cereales"), lcd);
    //       lcd.clear();
-   //       lcdWrite((unsigned char)* ("Preparando..."), lcd);*/
-   //       Serial.println("Tirando Cereales");
-   //       posAct = moveMotor(posCere, posAct, servo, loopServo);
-   //       //lcd.clear();
-   //       //lcdWrite((unsigned char)* ("MUCHAS GRACIAS!"), lcd);
+   //       lcdWrite(("MUCHAS GRACIAS!"), lcd);
+   //       delay(5000);
    //       break;
-   //    // case CAFECLECHE:
-   //    //    lcdWrite((unsigned char)* ("Elijió el cafe con leche"), lcd);
-   //    //    lcd.clear();
-   //    //    lcdWrite((unsigned char)* ("Preparando..."), lcd);
-   //    //    posAct = moveMotor(posCafe, posAct, bomCafe, elecCafe, waitTime);
-   //    //    posAct = moveMotor(posLeche, posAct, bomLeche, elecLeche, waitTime);
-   //    //    lcd.clear();
-   //    //    lcdWrite((unsigned char)* ("MUCHAS GRACIAS!"), lcd);
-   //    //    break;
-   //    // case CEREALESCLECHE:
-   //    //    lcdWrite((unsigned char)* ("Elijió los cereales con leche"), lcd);
-   //    //    lcd.clear();
-   //    //    lcdWrite((unsigned char)* ("Preparando..."), lcd);
-   //    //    // posAct = moveMotor(posCere, posAct, servo, loopServo);
-   //    //    posAct = moveMotor(posLeche, posAct, bomLeche, elecLeche, waitTime);
-   //    //    lcd.clear();
-   //    //    lcdWrite((unsigned char)* ("MUCHAS GRACIAS!"), lcd);
-   //    //    break;
+   //    case LECHE:
+   //       lcdWrite(("Leche"), lcd);
+   //       delay(2000);
+   //       lcd.clear();
+   //       lcdWrite(("Preparando..."), lcd);
+   //       posAct = moveMotor(posLeche, posAct, bomLeche, elecLeche, waitTime);
+   //       delay(4000);
+   //       lcd.clear();
+   //       lcdWrite(("MUCHAS GRACIAS!"), lcd);
+   //       delay(5000);
+   //       break;
+   //    case CEREALES:
+   //       lcdWrite(("Cereales"), lcd);
+   //       delay(2000);
+   //       lcd.clear();
+   //       lcdWrite(("Preparando..."), lcd);
+   //       posAct = moveMotor(posCere, posAct, servo, loopServo);
+   //       delay(4000);
+   //       lcd.clear();
+   //       lcdWrite(("MUCHAS GRACIAS!"), lcd);
+   //       delay(5000);
+   //       break;
+   //    case CAFECLECHE:
+   //       lcdWrite(("Cafe con leche"), lcd);
+   //       delay(2000);
+   //       lcd.clear();
+   //       lcdWrite(("Preparando..."), lcd);
+   //       posAct = moveMotor(posCafe, posAct, bomCafe, elecCafe, waitTime);
+   //       posAct = moveMotor(posLeche, posAct, bomLeche, elecLeche, waitTime);
+   //       lcd.clear();
+   //       lcdWrite(("MUCHAS GRACIAS!"), lcd);
+   //       delay(5000);
+   //       break;
+   //    case CEREALESCLECHE:
+   //       lcdWrite(("Cereales con    leche"), lcd);
+   //       delay(2000);
+   //       lcd.clear();
+   //       lcdWrite(("Preparando..."), lcd);
+   //       posAct = moveMotor(posCere, posAct, servo, loopServo);
+   //       posAct = moveMotor(posLeche, posAct, bomLeche, elecLeche, waitTime);
+   //       lcd.clear();
+   //       lcdWrite(("MUCHAS GRACIAS!"), lcd);
+   //       delay(5000);
+   //       break;
    // };
-   
+   // delay(5000);
+   // lcd.clear();
    // //Vuelve el motor a la posición inicial
+   // lcd.print("Volviendo atras el motor...");
    // backMotor(posAct);  
 } 
 
