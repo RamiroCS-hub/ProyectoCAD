@@ -136,8 +136,8 @@ char keys[ROWS][COLS] = {
 };
 
 //Declaraciones de pines de la matriz
-byte rowPins[ROWS] = { 19, 4, 2, 16 };
-byte columnPins[COLS] = { 17, 18, 5, 15 };
+byte rowPins[ROWS] = { 17, 5, 18, 19 };
+byte columnPins[COLS] = { 15, 2, 4, 16 };
 
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, columnPins, ROWS, COLS );
 
