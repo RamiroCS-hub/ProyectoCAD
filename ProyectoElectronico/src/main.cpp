@@ -13,7 +13,7 @@
 #define SEN_C 12
 #define COOLLER_C 0
 #define COOLLER_F 00
-#define RESIS 000 
+#define RESIS 15
 #define PELT_ 0000
 #define SDA 21
 #define SCL 22
@@ -165,6 +165,7 @@ void setup() {
    pinMode(pinMotor, OUTPUT);
    pinMode(pinDirec, OUTPUT);
    pinMode(MOTOR, OUTPUT);
+   pinMode(RESIS, OUTPUT);
    
    //Loop 2
    xTaskCreatePinnedToCore(
