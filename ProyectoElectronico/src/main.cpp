@@ -14,7 +14,7 @@
 #define COOLLER_C 0
 #define COOLLER_F 00
 #define RESIS 15
-#define PELT_ 0000
+#define PELT 0000
 #define SDA 21
 #define SCL 22
 
@@ -40,10 +40,10 @@ void loop1(void *parameter){
    while(1){
       //Leer la temperatura
       Serial.println("Segundo núcleo");
-      //digitalWrite(33,HIGH);
-      delay(1000);
-      //digitalWrite(33,LOW);
-      delay(10000);
+      digitalWrite(RESIS,HIGH);
+      delay(2000);
+      digitalWrite(RESIS,LOW);
+      delay(2000);
       // Serial.print("Mandando comandos a los sensores ");
       // sensor1.requestTemperatures();
       // sensor2.requestTemperatures();
@@ -105,12 +105,12 @@ void loop1(void *parameter){
 #define CHICO '3'
 #define MEDIANO '6'
 #define GRANDE '9'
-#define TIMEC 2000
-#define TIMEM 20
-#define TIMEG 30
-#define LOOPC 2
-#define LOOPM 4
-#define LOOPG 6
+#define TIMEC 5000
+#define TIMEM 7000
+#define TIMEG 10000
+#define LOOPC 3
+#define LOOPM 5
+#define LOOPG 7
 #define MOTOR 26
 
 //Pines de cafe
@@ -166,7 +166,7 @@ void setup() {
    pinMode(pinDirec, OUTPUT);
    pinMode(MOTOR, OUTPUT);
    pinMode(RESIS, OUTPUT);
-   
+   pinMode(PELT, OUTPUT);
    //Loop 2
    xTaskCreatePinnedToCore(
        loop1,
@@ -192,6 +192,7 @@ void loop() {
    
    //INGRESO DE TAMAÑO DEL DESAYUNO
    lcdWrite("Ingrese la dimension del vaso", lcd);
+   //digitalWrite(RESIS, HIGH);
    do{
       size = keypad.getKey();
       if(size){

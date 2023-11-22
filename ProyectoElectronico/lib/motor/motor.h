@@ -72,7 +72,10 @@ int moveMotor(int posAIr, int posActual, int pinAct, int size, Servo servoMotor)
         servoMotor.write(0);
         delay(800);
         servoMotor.write(180);
+        delay(800);
+        servoMotor.write(0);
     }
+
     return posActual;
 };
 
